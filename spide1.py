@@ -3,7 +3,7 @@ import re
 
 
 def input_code():
-    code = input("please input code:")
+    code = input("please input code (like input : sz000001):")
     if len(code) == 8:
         print("input code:",code)
         return code
@@ -19,13 +19,22 @@ def getHTMLText(url):
     except:
         return "error"
 
-if __name__ == "__main__":
-    url = 'http://hq.sinajs.cn/list='+input_code()
-    data_str = getHTMLText(url)
+def re_Text(code,text):
+    '''对获取的html进行正则化筛选返回列表'''
+    p = re.compile(r'\"([^\"].*)\"')
+    ss = p.findall(text)[0]
+    d_list = re.split(r',', ss)
+    d_list.append(code)
+    return d_list
 
-    p = '\"([^\"]*)\"'
-    matchObj = re.match(p,data_str)
-    print(matchObj.group())
+if __name__ == "__main__":
+    code = input_code()
+    url = 'http://hq.sinajs.cn/list='+code
+    data_str = getHTMLText(url)
+    data_list = re_Text(code,data_str)
+    print(data_list)
+
+
 
 
 
